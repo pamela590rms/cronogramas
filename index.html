@@ -20,7 +20,7 @@
 <div id="login" class="login-shell hidden"><div class="login-card">
  <div class="login-head"><div class="login-badge">📅</div><div><h1>Gestión de Cronogramas</h1><div class="muted micro">CRONOGRAMAS FERNANDA PAMELA RAMOS MOYA</div></div></div>
  <div id="setupPanel" class="hidden"><p class="muted">Primera apertura: configure el administrador principal. Sus datos se guardarán únicamente en este equipo.</p><form id="setupForm"><label>Nombre del administrador</label><input name="name" required maxlength="120" placeholder="Administrador"><label>Usuario de acceso</label><input name="login" required minlength="3" maxlength="70" placeholder="administrador"><label>Contraseña (mínimo 8 caracteres)</label><input name="pass" type="password" required minlength="8" autocomplete="new-password"><label>Confirmar contraseña</label><input name="pass2" type="password" required minlength="8" autocomplete="new-password"><button class="btn primary" type="submit">Crear administrador e ingresar</button></form></div>
- <div id="loginPanel" class="hidden"><p class="muted">Ingrese con el usuario y clave asignados. Los lectores no pueden registrar ni modificar información.</p><form id="loginForm"><label for="loginEmail">Usuario</label><input id="loginEmail" type="text" autocomplete="username" required placeholder="Nombre de usuario"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Contraseña"><button type="submit" id="btnLogin" class="btn primary">Ingresar</button></form></div>
+ <div id="loginPanel" class="hidden"><p class="muted">Ingrese con el usuario y clave asignados. Desde GitHub Pages, los lectores consultan los datos publicados y no pueden modificarlos.</p><form id="loginForm"><label for="loginEmail">Usuario</label><input id="loginEmail" type="text" autocomplete="username" required placeholder="Nombre de usuario"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Contraseña"><button type="submit" id="btnLogin" class="btn primary">Ingresar</button></form></div>
  <p class="footnote">Sin Firebase. Guardado local con sincronización opcional a GitHub, configurada por el administrador.</p>
  <div id="loginError" class="alert hidden" role="alert"></div>
  </div></div>
@@ -39,7 +39,7 @@
 <section id="page-actividades" class="section"><div class="card"><div class="section-head"><h3>Registro de actividades y entregables</h3><button class="btn primary admin-only" id="btnAddTask">+ Nueva actividad</button></div><div class="filters"><div><label for="taskSearch">Buscar</label><input id="taskSearch" type="search" placeholder="Actividad, entregable u observaciones"></div><div><label for="filterPhase">Fase</label><select id="filterPhase"><option value="">Todas</option></select></div><div><label for="filterStatus">Estado</label><select id="filterStatus"><option value="">Todos</option><option value="Pendiente">Pendiente</option><option value="En proceso">En proceso</option><option value="Completado">Completado</option><option value="Retrasado">Retrasado</option></select></div><div><label for="filterOrder">Ordenar</label><select id="filterOrder"><option value="fecha">Entrega próxima</option><option value="fase">Fase</option><option value="avance">Menor avance</option></select></div><button class="btn light" id="clearFilters">Limpiar</button></div><div class="table-scroll"><table><thead><tr><th>N.º</th><th>Fase</th><th>Actividad</th><th>Fecha de entrega</th><th>Entregable</th><th>Observaciones</th><th>Avance</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="tasksTbody"></tbody></table></div><p id="taskCount" class="fine"></p></div></section>
 <section id="page-calendario" class="section"><div class="card"><h3>Línea de tiempo de entregas</h3><p class="muted micro">Cada punto representa la fecha límite de una actividad. No se muestran fechas de inicio porque el Excel original únicamente registra entregas.</p><div id="timelineRoot"></div></div></section>
 <section id="page-historial" class="section"><div class="card"><div class="section-head"><h3>Bitácora de cambios y avances</h3><span class="fine">Los avances se registran con fecha, responsable y observación.</span></div><div class="table-scroll"><table><thead><tr><th>Fecha de registro</th><th>Actividad / proyecto</th><th>Tipo de movimiento</th><th>Detalle</th><th>Realizado por</th></tr></thead><tbody id="historyTbody"></tbody></table></div></div></section>
-<section id="page-usuarios" class="section"><div class="card"><div class="section-head"><h3>Usuarios de solo consulta</h3><button class="btn primary" id="btnAddUser">+ Crear usuario lector</button></div><p class="note">Los usuarios lectores pueden consultar proyectos, actividades, calendario, reportes e historial. No tienen controles de edición. Las cuentas y datos existen solamente en este navegador/perfil; no hay sincronización automática entre equipos.</p><div class="table-scroll"><table><thead><tr><th>Nombre</th><th>Correo</th><th>Estado</th><th>Fecha de alta</th><th>Acciones</th></tr></thead><tbody id="usersTbody"></tbody></table></div></div></section>
+<section id="page-usuarios" class="section"><div class="card"><div class="section-head"><h3>Usuarios de solo consulta</h3><button class="btn primary" id="btnAddUser">+ Crear usuario lector</button></div><p class="note">Los usuarios lectores pueden consultar proyectos, actividades, calendario, reportes e historial. No tienen controles de edición. Los lectores pueden ingresar desde otros dispositivos a través de GitHub Pages con sus credenciales, siempre que los cambios estén publicados en el JSON cifrado.</p><div class="table-scroll"><table><thead><tr><th>Nombre</th><th>Correo</th><th>Estado</th><th>Fecha de alta</th><th>Acciones</th></tr></thead><tbody id="usersTbody"></tbody></table></div></div></section>
 <section id="page-respaldo" class="section"><div class="grid cols2">
 <div class="card"><h3>💾 Respaldo completo JSON</h3><p class="muted">Descargue una copia de proyectos, actividades, historiales, usuarios y verificadores de contraseña. Guárdela en un lugar privado.</p><p class="fine" id="backupCount"></p><button class="btn primary" id="btnBackup">↓ Descargar respaldo</button></div>
 <div class="card"><h3>↥ Restaurar respaldo</h3><p class="muted">Reemplaza los registros actuales de este navegador. Solicita la clave actual del administrador antes de importar. No se conecta con otros equipos.</p><button class="btn light" id="btnRestore">Seleccionar JSON</button><input id="backupFile" type="file" accept="application/json,.json" class="hidden"></div>
@@ -92,9 +92,9 @@ function bytesHex(bytes){return Array.from(bytes,b=>b.toString(16).padStart(2,'0
 async function credential(password,salt){if(!crypto?.subtle)throw Error('Este navegador no permite cifrado local. Use Chrome, Edge o Safari actualizado, abriendo el archivo directamente en el equipo.');const s=salt||bytesHex(crypto.getRandomValues(new Uint8Array(16)));const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);const result=await crypto.subtle.deriveBits({name:'PBKDF2',salt:Uint8Array.from(s.match(/../g).map(a=>parseInt(a,16))),iterations:125000,hash:'SHA-256'},base,256);return {salt:s,hash:bytesHex(new Uint8Array(result))}}
 function constantTimeEqual(a,b){if(a.length!==b.length)return false;let diff=0;for(let i=0;i<a.length;i++)diff|=a.charCodeAt(i)^b.charCodeAt(i);return diff===0}
 async function verify(password,rec){if(!rec?.hash||!rec.salt)return false;return constantTimeEqual((await credential(password,rec.salt)).hash,rec.hash)}
-function showGate(){const initialized=db.users.some(u=>u.role==='admin');$('loading').classList.add('hidden');$('app').classList.add('hidden');$('login').classList.remove('hidden');$('setupPanel').classList.toggle('hidden',initialized);$('loginPanel').classList.toggle('hidden',!initialized);$('loginError').classList.add('hidden');$('loginForm').reset();}
+function showGate(){const initialized=db.users.some(u=>u.role==='admin')||location.hostname.toLowerCase().endsWith('.github.io');$('loading').classList.add('hidden');$('app').classList.add('hidden');$('login').classList.remove('hidden');$('setupPanel').classList.toggle('hidden',initialized);$('loginPanel').classList.toggle('hidden',!initialized);$('loginError').classList.add('hidden');$('loginForm').reset();}
 function showApp(){if(!user()){session=null;showGate();return}$('loading').classList.add('hidden');$('login').classList.add('hidden');$('app').classList.remove('hidden');document.querySelectorAll('.admin-only').forEach(el=>el.classList.toggle('hidden',!admin()));$('userLabel').textContent=(admin()?'🔐 Administrador · ':'👁️ Solo consulta · ')+user().name;
- $('connectionNotice').classList.remove('hidden');$('connectionNotice').innerHTML='💾 <strong>Guardado local:</strong> cada cambio se conserva en este navegador. Puede activar la copia automática cifrada a GitHub desde <strong>Respaldo</strong>. La página no carga datos de GitHub automáticamente en otros dispositivos.';
+ $('connectionNotice').classList.remove('hidden');$('connectionNotice').innerHTML='💾 <strong>Guardado local:</strong> cada cambio se conserva en este navegador. Puede activar la copia automática cifrada a GitHub desde <strong>Respaldo</strong>. Los lectores consultan la versión publicada de GitHub cuando inician sesión desde otro dispositivo.';
  $('projectPicker').value=activeProject;openPage(currentPage);ghRenderStatus();}
 function chooseProject(){if(!db.projects.some(p=>p.id===activeProject&&!p.archived))activeProject=db.projects.find(p=>!p.archived)?.id||''}
 const projects=()=>db.projects.filter(p=>!p.archived);
@@ -174,7 +174,7 @@ function deleteProject(id){action(async()=>{
   });
   toast('Proyecto y registros asociados eliminados.');
 })}
-function modalUser(){if(!admin())return;modal('Crear usuario de solo consulta',`<p class="note">Este usuario solo podrá ingresar para visualizar la información del cronograma en <strong>este mismo navegador y perfil</strong>. No podrá editar, registrar avances ni administrar usuarios.</p><form id="formUser" class="form-grid" style="margin-top:12px"><div class="wide"><label>Nombre *</label><input name="name" maxlength="120" required></div><div class="wide"><label>Usuario para iniciar sesión *</label><input name="login" minlength="3" maxlength="70" autocomplete="off" required placeholder="Ej.: consulta1"></div><div><label>Contraseña (mínimo 8 caracteres) *</label><input name="pass" type="password" minlength="8" required autocomplete="new-password"></div><div><label>Confirmar contraseña *</label><input name="pass2" type="password" minlength="8" required autocomplete="new-password"></div><div class="wide modal-actions"><button type="button" class="btn light" id="cancelUser">Cancelar</button><button type="submit" class="btn primary">Crear lector</button></div></form>`);$('cancelUser').onclick=closeModal;$('formUser').onsubmit=e=>{e.preventDefault();action(async()=>{needAdmin();const f=new FormData(e.target),name=String(f.get('name')||'').trim(),login=String(f.get('login')||'').trim(),pass=String(f.get('pass')||'');if(!name||login.length<3||pass.length<8||pass!==f.get('pass2'))throw Error('Datos incompletos o contraseñas distintas.');if(db.users.some(u=>sameLogin(u.login)===sameLogin(login)))throw Error('Ya existe una cuenta con ese nombre de usuario.');const c=await credential(pass);commit(state=>state.users.push({id:uid(),name,login,role:'reader',active:true,created:new Date().toISOString(),...c}));closeModal();toast('Usuario lector registrado.')})}}
+function modalUser(){if(!admin())return;modal('Crear usuario de solo consulta',`<p class="note">Este usuario podrá visualizar el cronograma desde otros dispositivos mediante GitHub Pages, después de sincronizar los datos cifrados. No podrá editar, registrar avances ni administrar usuarios.</p><form id="formUser" class="form-grid" style="margin-top:12px"><div class="wide"><label>Nombre *</label><input name="name" maxlength="120" required></div><div class="wide"><label>Usuario para iniciar sesión *</label><input name="login" minlength="3" maxlength="70" autocomplete="off" required placeholder="Ej.: consulta1"></div><div><label>Contraseña (mínimo 8 caracteres) *</label><input name="pass" type="password" minlength="8" required autocomplete="new-password"></div><div><label>Confirmar contraseña *</label><input name="pass2" type="password" minlength="8" required autocomplete="new-password"></div><div class="wide modal-actions"><button type="button" class="btn light" id="cancelUser">Cancelar</button><button type="submit" class="btn primary">Crear lector</button></div></form>`);$('cancelUser').onclick=closeModal;$('formUser').onsubmit=e=>{e.preventDefault();action(async()=>{needAdmin();const f=new FormData(e.target),name=String(f.get('name')||'').trim(),login=String(f.get('login')||'').trim(),pass=String(f.get('pass')||'');if(!name||login.length<3||pass.length<8||pass!==f.get('pass2'))throw Error('Datos incompletos o contraseñas distintas.');if(db.users.some(u=>sameLogin(u.login)===sameLogin(login)))throw Error('Ya existe una cuenta con ese nombre de usuario.');const c=await credential(pass);commit(state=>state.users.push({id:uid(),name,login,role:'reader',active:true,created:new Date().toISOString(),...c}));closeModal();toast('Usuario lector registrado.')})}}
 function toggleReader(id){action(async()=>{needAdmin();const r=db.users.find(x=>x.id===id&&x.role==='reader');if(!r||!confirm((r.active?'¿Suspender':'¿Activar')+' a '+r.name+'?'))return;commit(state=>state.users.find(x=>x.id===id).active=!r.active);toast('Permiso actualizado.')})}
 function resetReader(id){if(!admin())return;const r=db.users.find(x=>x.id===id&&x.role==='reader');if(!r)return;modal('Cambiar contraseña de lector',`<p class="note">${esc(r.name)} · ${esc(r.login)}</p><form id="resetForm"><label>Contraseña nueva (mín. 8)</label><input name="pass" type="password" required minlength="8"><label style="margin-top:12px">Confirmar</label><input name="pass2" type="password" required minlength="8"><div class="modal-actions"><button class="btn primary" type="submit">Guardar contraseña</button></div></form>`);$('resetForm').onsubmit=e=>{e.preventDefault();action(async()=>{needAdmin();const f=new FormData(e.target),pass=String(f.get('pass')||'');if(pass.length<8||pass!==f.get('pass2'))throw Error('Las contraseñas no coinciden o son muy cortas.');const c=await credential(pass);commit(state=>Object.assign(state.users.find(x=>x.id===id),c));closeModal();toast('Contraseña del usuario actualizada.')})}}
 function changeAdminPassword(){if(!admin())return;modal('Cambiar contraseña de administrador',`<form id="changeAdminForm"><label>Contraseña actual *</label><input name="old" type="password" required autocomplete="current-password"><label style="margin-top:12px">Contraseña nueva (mín. 8 caracteres) *</label><input name="pass" type="password" required minlength="8" autocomplete="new-password"><label style="margin-top:12px">Confirmar contraseña *</label><input name="pass2" type="password" required minlength="8"><div class="modal-actions"><button class="btn primary" type="submit">Cambiar contraseña</button></div></form>`);$('changeAdminForm').onsubmit=e=>{e.preventDefault();action(async()=>{needAdmin();const f=new FormData(e.target),pass=String(f.get('pass')||'');if(!(await verify(String(f.get('old')||''),user())))throw Error('Contraseña actual incorrecta.');if(pass.length<8||pass!==f.get('pass2'))throw Error('Revise la contraseña nueva y su confirmación.');const c=await credential(pass);commit(state=>Object.assign(state.users.find(u=>u.id===session.id),c));closeModal();toast('Contraseña de administrador actualizada.')})}}
@@ -192,6 +192,7 @@ function exportBackup(){needAdmin();download('respaldo_cronogramas_'+today()+'.j
 async function importBackup(file){needAdmin();if(!file)return;const raw=await file.text();if(raw.length>12e6)throw Error('El archivo es demasiado grande para este aplicativo.');const pack=JSON.parse(raw);if(pack.schema!=='gmc-cronogramas-local-1')throw Error('El archivo no es un respaldo compatible.');const data=pack.data;if(!data||!Array.isArray(data.users)||!Array.isArray(data.projects)||!Array.isArray(data.tasks)||!Array.isArray(data.history)||!data.users.some(u=>u.role==='admin'&&u.hash&&u.salt))throw Error('El respaldo está incompleto o no tiene administrador.');const pw=prompt('Para restaurar, escriba su CONTRASEÑA ACTUAL de administrador:');if(pw===null)return;if(!(await verify(pw,user())))throw Error('Contraseña incorrecta. Restauración cancelada.');if(!confirm('ATENCIÓN: se reemplazarán TODOS los cronogramas y usuarios de ESTE navegador con el contenido del respaldo. Haga primero un respaldo actual. ¿Continuar?'))return;ghStop();localStorage.setItem(KEY,JSON.stringify(data));db=data;session=null;showGate();toast('Respaldo restaurado. Ingrese con una cuenta del archivo restaurado.')}
 // Sincronización GitHub: credenciales SOLO en memoria, datos remotos cifrados.
 const GH_CFG_KEY='cronogramas_gh_config_v1';
+const GH_SCHEMA_V1='cronogramas-github-cifrado-1', GH_SCHEMA_V2='cronogramas-github-cifrado-2';
 let ghConfig=null, ghToken='', ghSecret='', ghSha=null, ghAck=null, ghActive=false, ghSending=false, ghEpoch=0;
 let ghNotice='GitHub desconectado. Los datos se siguen guardando en este navegador.';
 function ghSetNotice(s){ghNotice=s;ghRenderStatus()}
@@ -244,26 +245,102 @@ function ghUnb64(value){const s=atob(String(value||'').replace(/\s/g,''));return
 function ghValidateDB(d){
  return d&&Array.isArray(d.users)&&Array.isArray(d.projects)&&Array.isArray(d.tasks)&&Array.isArray(d.history)&&d.users.some(u=>u.role==='admin'&&u.hash&&u.salt);
 }
+// Cifrado con una clave de datos nueva por publicación; cada cuenta activa obtiene
+// una copia cifrada de esa clave, sin recibir el token ni la clave del administrador.
+async function ghMemberTag(login,salt){
+ const input=new TextEncoder().encode('cronogramas-lector-v2|'+salt+'|'+sameLogin(login));
+ return bytesHex(new Uint8Array(await crypto.subtle.digest('SHA-256',input)));
+}
+function ghHashBytes(hash){
+ if(!/^[a-f0-9]{64}$/i.test(String(hash||'')))throw Error('El verificador de usuario es inválido.');
+ return Uint8Array.from(hash.match(/../g),x=>parseInt(x,16));
+}
 async function ghEncrypt(plain){
  if(!crypto?.subtle)throw Error('Se requiere HTTPS y un navegador con criptografía segura para cifrar la copia.');
- const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
- const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(ghSecret),'PBKDF2',false,['deriveKey']);
- const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:210000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt']);
- const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(plain));
- return JSON.stringify({schema:'cronogramas-github-cifrado-1',salt:ghB64(salt),iv:ghB64(iv),data:ghB64(new Uint8Array(cipher))},null,2)+'\n';
+ const payload=JSON.parse(plain);
+ if(!ghValidateDB(payload))throw Error('Los datos que se van a publicar no son válidos.');
+ const dataBytes=crypto.getRandomValues(new Uint8Array(32));
+ const dataKey=await crypto.subtle.importKey('raw',dataBytes,{name:'AES-GCM'},false,['encrypt']);
+ const iv=crypto.getRandomValues(new Uint8Array(12));
+ const encrypted=await crypto.subtle.encrypt({name:'AES-GCM',iv},dataKey,new TextEncoder().encode(plain));
+ const adminSalt=crypto.getRandomValues(new Uint8Array(16)),adminIv=crypto.getRandomValues(new Uint8Array(12));
+ const adminBase=await crypto.subtle.importKey('raw',new TextEncoder().encode(ghSecret),'PBKDF2',false,['deriveKey']);
+ const adminKey=await crypto.subtle.deriveKey({name:'PBKDF2',salt:adminSalt,iterations:210000,hash:'SHA-256'},adminBase,{name:'AES-GCM',length:256},false,['encrypt']);
+ const wrappedAdmin=await crypto.subtle.encrypt({name:'AES-GCM',iv:adminIv},adminKey,dataBytes);
+ // Los lectores reciben una copia de consulta SIN hashes de otros usuarios ni del administrador.
+ // Una cuenta revocada no puede abrir publicaciones nuevas usando verificadores ajenos.
+ const visibleProjects=payload.projects.filter(p=>!p.archived),visibleIds=new Set(visibleProjects.map(p=>p.id));
+ const viewer={version:payload.version,modified:payload.modified,projects:visibleProjects,
+   tasks:payload.tasks.filter(t=>visibleIds.has(t.proyectoId)&&!t.archived),
+   history:payload.history.filter(h=>visibleIds.has(h.proyectoId)),
+   users:payload.users.filter(u=>u.role==='reader'&&u.active).map(u=>({id:u.id,name:u.name,login:u.login,role:'reader',active:true}))};
+ const viewerBytes=crypto.getRandomValues(new Uint8Array(32)),viewerIv=crypto.getRandomValues(new Uint8Array(12));
+ const viewerKey=await crypto.subtle.importKey('raw',viewerBytes,{name:'AES-GCM'},false,['encrypt']);
+ const encryptedViewer=await crypto.subtle.encrypt({name:'AES-GCM',iv:viewerIv},viewerKey,new TextEncoder().encode(JSON.stringify(viewer)));
+ const members=[];
+ for(const member of payload.users.filter(u=>u.role==='reader'&&u.active&&u.hash&&u.salt)){
+   const memberIv=crypto.getRandomValues(new Uint8Array(12));
+   const memberKey=await crypto.subtle.importKey('raw',ghHashBytes(member.hash),{name:'AES-GCM'},false,['encrypt']);
+   const wrapped=await crypto.subtle.encrypt({name:'AES-GCM',iv:memberIv},memberKey,viewerBytes);
+   members.push({tag:await ghMemberTag(member.login,member.salt),salt:member.salt,iv:ghB64(memberIv),key:ghB64(new Uint8Array(wrapped))});
+ }
+ return JSON.stringify({schema:GH_SCHEMA_V2,iv:ghB64(iv),data:ghB64(new Uint8Array(encrypted)),admin:{salt:ghB64(adminSalt),iv:ghB64(adminIv),key:ghB64(new Uint8Array(wrappedAdmin))},viewer:{iv:ghB64(viewerIv),data:ghB64(new Uint8Array(encryptedViewer))},members},null,2)+'\n';
 }
 async function ghDecrypt(raw){
  const obj=JSON.parse(raw);
- if(obj.schema!=='cronogramas-github-cifrado-1')throw Error('El JSON remoto no tiene el formato cifrado de esta aplicación. Para reemplazarlo, utilice «Publicar datos locales» tras verificar su contenido.');
  if(!crypto?.subtle)throw Error('No se puede descifrar en este navegador.');
- const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(ghSecret),'PBKDF2',false,['deriveKey']);
- const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:ghUnb64(obj.salt),iterations:210000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
- let plaintext;
- try{plaintext=await crypto.subtle.decrypt({name:'AES-GCM',iv:ghUnb64(obj.iv)},key,ghUnb64(obj.data))}
- catch(_){throw Error('La clave de cifrado es incorrecta o el JSON remoto fue modificado. No se ha sobrescrito nada.');}
- const data=JSON.parse(new TextDecoder().decode(plaintext));
+ let plain;
+ if(obj.schema===GH_SCHEMA_V1){
+   const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(ghSecret),'PBKDF2',false,['deriveKey']);
+   const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:ghUnb64(obj.salt),iterations:210000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+   try{plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:ghUnb64(obj.iv)},key,ghUnb64(obj.data));}
+   catch(_){throw Error('La clave de cifrado es incorrecta o el JSON remoto fue modificado. No se ha sobrescrito nada.');}
+ }else if(obj.schema===GH_SCHEMA_V2){
+   try{
+     const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(ghSecret),'PBKDF2',false,['deriveKey']);
+     const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:ghUnb64(obj.admin.salt),iterations:210000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+     const dataBytes=await crypto.subtle.decrypt({name:'AES-GCM',iv:ghUnb64(obj.admin.iv)},key,ghUnb64(obj.admin.key));
+     const contentKey=await crypto.subtle.importKey('raw',dataBytes,{name:'AES-GCM'},false,['decrypt']);
+     plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:ghUnb64(obj.iv)},contentKey,ghUnb64(obj.data));
+   }catch(_){throw Error('La clave privada de cifrado es incorrecta o el archivo remoto fue modificado.');}
+ }else throw Error('El JSON remoto no tiene un formato cifrado compatible.');
+ const data=JSON.parse(new TextDecoder().decode(plain));
  if(!ghValidateDB(data))throw Error('El archivo descifrado no contiene una base de datos válida.');
  return data;
+}
+// La lectura pública no requiere token: solo funciona en repositorios accesibles públicamente.
+async function ghRemoteLogin(login,password){
+ if(!crypto?.subtle)throw Error('Se requiere abrir el aplicativo con HTTPS en un navegador actualizado.');
+ const cfg=ghGuessedConfig();
+ if(!cfg.owner||!cfg.repo)throw Error('No se pudo identificar el repositorio. Abra la página publicada en GitHub Pages.');
+ const uri='https://api.github.com/repos/'+encodeURIComponent(cfg.owner)+'/'+encodeURIComponent(cfg.repo)+'/contents/'+cfg.path.split('/').map(encodeURIComponent).join('/')+'?ref='+encodeURIComponent(cfg.branch);
+ let response;
+ try{response=await fetch(uri,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});}
+ catch(_){throw Error('No se pudo conectar con GitHub. Revise Internet y vuelva a intentar.');}
+ if(response.status===404)throw Error('No se encontró el JSON público de cronogramas. Compruebe que esté publicado en el repositorio correcto.');
+ if(!response.ok)throw Error('No se pudo consultar el JSON de GitHub (HTTP '+response.status+'). Debe ser un repositorio público y estar disponible.');
+ const file=await response.json();
+ if(file?.type!=='file'||!file.content)throw Error('GitHub no devolvió el archivo completo.');
+ const obj=JSON.parse(new TextDecoder().decode(ghUnb64(file.content)));
+ if(obj.schema===GH_SCHEMA_V1)throw Error('El administrador debe actualizar el JSON: entrar a Respaldo, conectar GitHub y publicar el formato de acceso para lectores.');
+ if(obj.schema!==GH_SCHEMA_V2||!obj.viewer||!Array.isArray(obj.members))throw Error('El JSON no tiene el formato de acceso a usuarios compatible.');
+ for(const member of obj.members){
+   if(!member.salt||!member.tag||await ghMemberTag(login,member.salt)!==member.tag)continue;
+   let plain;
+   try{
+     const derived=await credential(password,member.salt);
+     const userKey=await crypto.subtle.importKey('raw',ghHashBytes(derived.hash),{name:'AES-GCM'},false,['decrypt']);
+     const bytes=await crypto.subtle.decrypt({name:'AES-GCM',iv:ghUnb64(member.iv)},userKey,ghUnb64(member.key));
+     const dataKey=await crypto.subtle.importKey('raw',bytes,{name:'AES-GCM'},false,['decrypt']);
+     plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:ghUnb64(obj.viewer.iv)},dataKey,ghUnb64(obj.viewer.data));
+   }catch(_){throw Error('Usuario o contraseña incorrectos, o cuenta sin autorización.');}
+   const data=JSON.parse(new TextDecoder().decode(plain));
+   if(!data||!Array.isArray(data.users)||!Array.isArray(data.projects)||!Array.isArray(data.tasks)||!Array.isArray(data.history)||data.users.some(u=>u.role!=='reader'||u.hash||u.salt))throw Error('Los datos de consulta remotos no son válidos.');
+   const record=data.users.find(u=>u.active&&sameLogin(u.login)===sameLogin(login));
+   if(!record||record.role!=='reader')throw Error('Usuario o contraseña incorrectos, o cuenta sin autorización.');
+   return {data,userId:record.id};
+ }
+ throw Error('Usuario o contraseña incorrectos, o cuenta sin autorización.');
 }
 async function ghRemote(){
  const r=await fetch(ghUrl(),{method:'GET',headers:ghHeaders(),cache:'no-store'});
@@ -319,8 +396,15 @@ async function ghConnect(){
      try{
        const fromGitHub=await ghDecrypt(remote.raw);
        if(JSON.stringify(fromGitHub)===JSON.stringify(db)){
-         ghAck=JSON.stringify(db);ghActive=true;
-         ghSetNotice('✓ Conectado. Datos locales y de GitHub coinciden. Los siguientes cambios se guardarán automáticamente.');
+         ghActive=true;
+         if(JSON.parse(remote.raw).schema===GH_SCHEMA_V1){
+           ghAck=null;
+           ghSetNotice('Actualizando el formato cifrado para permitir el acceso de usuarios desde otros dispositivos…');
+           await ghFlush();
+         }else{
+           ghAck=JSON.stringify(db);
+           ghSetNotice('✓ Conectado. Datos locales y de GitHub coinciden. Los siguientes cambios se guardarán automáticamente.');
+         }
        }else{
          ghSetNotice('⚠ Hay diferencias entre GitHub y este navegador. Por seguridad NO se sobrescribió nada. Use «Publicar datos locales» o «Traer datos de GitHub» después de verificar cuál versión desea conservar.');
        }
@@ -357,8 +441,27 @@ async function ghPullData(){
 function renderBackupInfo(){ghRenderStatus();$('backupCount').textContent=`${db.projects.length} proyectos · ${db.tasks.length} actividades · ${db.history.length} movimientos · Último cambio: ${datetime(db.modified)}.`}
 $('modalClose').onclick=closeModal;$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 $('setupForm').onsubmit=e=>{e.preventDefault();action(async()=>{if(db.users.some(u=>u.role==='admin'))throw Error('El administrador ya está configurado.');const f=new FormData(e.target),name=String(f.get('name')||'').trim(),login=String(f.get('login')||'').trim(),pass=String(f.get('pass')||'');if(!name||login.length<3||pass.length<8||pass!==f.get('pass2'))throw Error('Ingrese nombre, usuario y contraseña coincidente de mínimo 8 caracteres.');const c=await credential(pass),u={id:uid(),name,login,role:'admin',active:true,created:new Date().toISOString(),...c};db.users.push(u);try{localStorage.setItem(KEY,JSON.stringify(db))}catch(x){db.users.pop();throw Error('No se pudo guardar en el navegador. Habilite el almacenamiento local. '+x.message)}session={id:u.id};showApp();toast('Administrador creado. Ya puede registrar cronogramas.')})};
-$('loginForm').onsubmit=e=>{e.preventDefault();action(async()=>{const login=sameLogin($('loginEmail').value),pass=$('loginPassword').value,u=db.users.find(u=>sameLogin(u.login)===login&&u.active);const good=u&&await verify(pass,u);if(!good){$('loginError').textContent='Usuario, contraseña o estado de cuenta incorrectos.';$('loginError').classList.remove('hidden');return}session={id:u.id};$('loginError').classList.add('hidden');showApp()})};
-$('btnLogout').onclick=()=>{ghStop();session=null;activeProject='';currentPage='resumen';showGate()};$('projectPicker').onchange=e=>{activeProject=e.target.value;renderAll()};document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openPage(b.dataset.page));$('btnAddProject').onclick=()=>modalProject();$('btnAddTask').onclick=()=>modalTask();$('btnExample').onclick=loadExample;$('btnAddUser').onclick=modalUser;$('btnPrint').onclick=printProject;$('btnExport').onclick=exportCSV;$('btnConsult').onclick=exportConsult;$('viewTasks').onclick=()=>openPage('actividades');$('btnBackup').onclick=()=>action(async()=>exportBackup());$('btnRestore').onclick=()=>$('backupFile').click();$('backupFile').onchange=e=>action(async()=>{await importBackup(e.target.files[0]);e.target.value=''});$('btnChangeAdmin').onclick=changeAdminPassword;$('ghForm').onsubmit=e=>{e.preventDefault();action(ghConnect)};$('ghDisconnect').onclick=ghStop;$('ghPublish').onclick=()=>action(ghPublishLocal);$('ghPull').onclick=()=>action(ghPullData);
+$('loginForm').onsubmit=e=>{e.preventDefault();action(async()=>{
+ const login=sameLogin($('loginEmail').value),pass=$('loginPassword').value;
+ const local=db.users.find(u=>sameLogin(u.login)===login&&u.active);
+ // El administrador de este navegador conserva su acceso local y sus cambios pendientes.
+ if(local?.role==='admin'&&await verify(pass,local)){
+   session={id:local.id};$('loginError').classList.add('hidden');showApp();return;
+ }
+ // Los lectores siempre verifican el permiso vigente en el JSON público de GitHub.
+ const remoteSource=location.hostname.toLowerCase().endsWith('.github.io')||Boolean(ghGuessedConfig().owner&&ghGuessedConfig().repo);
+ if(remoteSource){
+   try{
+     const remote=await ghRemoteLogin(login,pass);
+     db=remote.data;session={id:remote.userId};activeProject='';currentPage='resumen';
+     $('loginError').classList.add('hidden');showApp();return;
+   }catch(x){$('loginError').textContent=x.message;$('loginError').classList.remove('hidden');return;}
+ }
+ const valid=local&&await verify(pass,local);
+ if(!valid){$('loginError').textContent='Usuario, contraseña o estado de cuenta incorrectos.';$('loginError').classList.remove('hidden');return;}
+ session={id:local.id};$('loginError').classList.add('hidden');showApp();
+})};
+$('btnLogout').onclick=()=>{ghStop();session=null;db=readDB();activeProject='';currentPage='resumen';showGate()};$('projectPicker').onchange=e=>{activeProject=e.target.value;renderAll()};document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openPage(b.dataset.page));$('btnAddProject').onclick=()=>modalProject();$('btnAddTask').onclick=()=>modalTask();$('btnExample').onclick=loadExample;$('btnAddUser').onclick=modalUser;$('btnPrint').onclick=printProject;$('btnExport').onclick=exportCSV;$('btnConsult').onclick=exportConsult;$('viewTasks').onclick=()=>openPage('actividades');$('btnBackup').onclick=()=>action(async()=>exportBackup());$('btnRestore').onclick=()=>$('backupFile').click();$('backupFile').onchange=e=>action(async()=>{await importBackup(e.target.files[0]);e.target.value=''});$('btnChangeAdmin').onclick=changeAdminPassword;$('ghForm').onsubmit=e=>{e.preventDefault();action(ghConnect)};$('ghDisconnect').onclick=ghStop;$('ghPublish').onclick=()=>action(ghPublishLocal);$('ghPull').onclick=()=>action(ghPullData);
 ['taskSearch','filterPhase','filterStatus','filterOrder'].forEach(id=>$(id).addEventListener(id==='taskSearch'?'input':'change',renderTasks));$('clearFilters').onclick=()=>{$('taskSearch').value='';$('filterPhase').value='';$('filterStatus').value='';$('filterOrder').value='fecha';renderTasks()};
 try{db=readDB();ghPreparePanel();renderBackupInfo();showGate()}catch(e){console.error(e);$('loading').classList.remove('hidden');$('loading').innerHTML='<div class="login-card"><h2>Error al leer datos locales</h2><p>'+esc(e.message)+'</p><p>Para proteger sus registros, la aplicación no los sobrescribirá. Revise el almacenamiento o restaure un respaldo manualmente.</p></div>'}
 
