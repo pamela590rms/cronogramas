@@ -21,12 +21,12 @@
  <div class="login-head"><div class="login-badge">📅</div><div><h1>Gestión de Cronogramas</h1><div class="muted micro">CRONOGRAMAS FERNANDA PAMELA RAMOS MOYA</div></div></div>
  <div id="setupPanel" class="hidden"><p class="muted">Primera apertura: configure el administrador principal. Sus datos se guardarán únicamente en este equipo.</p><form id="setupForm"><label>Nombre del administrador</label><input name="name" required maxlength="120" placeholder="Administrador"><label>Usuario de acceso</label><input name="login" required minlength="3" maxlength="70" placeholder="administrador"><label>Contraseña (mínimo 8 caracteres)</label><input name="pass" type="password" required minlength="8" autocomplete="new-password"><label>Confirmar contraseña</label><input name="pass2" type="password" required minlength="8" autocomplete="new-password"><button class="btn primary" type="submit">Crear administrador e ingresar</button></form></div>
  <div id="loginPanel" class="hidden"><p class="muted">Ingrese con el usuario y clave asignados. Los lectores no pueden registrar ni modificar información.</p><form id="loginForm"><label for="loginEmail">Usuario</label><input id="loginEmail" type="text" autocomplete="username" required placeholder="Nombre de usuario"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Contraseña"><button type="submit" id="btnLogin" class="btn primary">Ingresar</button></form></div>
- <p class="footnote">Aplicativo completamente local y sin Firebase. Los usuarios trabajan con los datos guardados en este navegador.</p>
+ <p class="footnote">Sin Firebase. Guardado local con sincronización opcional a GitHub, configurada por el administrador.</p>
  <div id="loginError" class="alert hidden" role="alert"></div>
  </div></div>
 <div id="app" class="layout hidden"><aside class="sidebar"><div class="logo"><div class="logo-mark">📅</div><div><h1>Control de cronogramas Fernanda Pamela Ramos Moya</h1></div></div>
 <nav class="nav" aria-label="Secciones"><button class="nav-btn active" data-page="resumen"><span class="nav-icon">▦</span> Resumen</button><button class="nav-btn" data-page="proyectos"><span class="nav-icon">◫</span> Proyectos</button><button class="nav-btn" data-page="actividades"><span class="nav-icon">☷</span> Actividades</button><button class="nav-btn" data-page="calendario"><span class="nav-icon">◷</span> Cronograma</button><button class="nav-btn" data-page="historial"><span class="nav-icon">↺</span> Historial</button><button class="nav-btn admin-only" data-page="usuarios"><span class="nav-icon">♙</span> Usuarios</button><button class="nav-btn admin-only" data-page="respaldo"><span class="nav-icon">▣</span> Respaldo</button></nav>
-<div class="sidebar-foot">Seguimiento de entregables y avances<br><strong>100 % local · Sin servidores externos</strong></div></aside>
+<div class="sidebar-foot">Seguimiento de entregables y avances<br><strong>Guardado local · GitHub opcional</strong></div></aside>
 <main class="main">
 <div class="top"><div><div class="eyebrow">Planificación y seguimiento</div><h2 id="pageTitle">Resumen ejecutivo</h2><div class="muted micro" id="projectSubtitle">Seleccione un proyecto para consultar sus actividades.</div></div><div><div class="actions"><select id="projectPicker" style="min-width:190px;max-width:300px" aria-label="Proyecto activo"></select><button class="btn light" id="btnPrint" title="Imprimir informe del proyecto">⎙ Imprimir</button><button class="btn light" id="btnExport" title="Exportar actividades a CSV">↓ CSV</button><button class="btn light" id="btnConsult" title="Generar copia HTML de solo consulta para compartir">↗ Consulta</button><button class="btn light" id="btnLogout">Salir</button></div><div class="userstrip" id="userLabel"></div></div></div>
 <div id="connectionNotice" class="note hidden" role="status" style="margin-bottom:14px"></div>
@@ -44,13 +44,29 @@
 <div class="card"><h3>💾 Respaldo completo JSON</h3><p class="muted">Descargue una copia de proyectos, actividades, historiales, usuarios y verificadores de contraseña. Guárdela en un lugar privado.</p><p class="fine" id="backupCount"></p><button class="btn primary" id="btnBackup">↓ Descargar respaldo</button></div>
 <div class="card"><h3>↥ Restaurar respaldo</h3><p class="muted">Reemplaza los registros actuales de este navegador. Solicita la clave actual del administrador antes de importar. No se conecta con otros equipos.</p><button class="btn light" id="btnRestore">Seleccionar JSON</button><input id="backupFile" type="file" accept="application/json,.json" class="hidden"></div>
 </div><div class="card" style="margin-top:14px"><h3>🔐 Seguridad de administrador</h3><p class="muted">Cambie periódicamente su contraseña. Se guarda un verificador derivado con sal, no la contraseña en texto.</p><button class="btn light" id="btnChangeAdmin">Cambiar clave de administrador</button></div>
+<div class="card" style="margin-top:14px"><h3>☁️ Sincronización automática con GitHub</h3>
+<p class="muted">Una vez establecida la conexión, cada cambio guardado por el administrador se envía automáticamente al archivo JSON de su repositorio. Los cambios se guardan primero en este navegador. No se modifica el archivo <code>index.html</code> en GitHub.</p>
+<p class="note"><strong>Seguridad:</strong> el JSON de GitHub se cifra antes de subirlo. El token y la clave de cifrado <strong>no se guardan</strong> en el HTML, en GitHub ni en el almacenamiento local; debe ingresarlos después de volver a abrir la página. Utilice un token de acceso personal de permisos finos, con acceso únicamente a este repositorio y permiso <strong>Contents: Read and write</strong>. Guarde su clave de cifrado fuera de GitHub: sin ella no podrá recuperar el archivo remoto.</p>
+<form id="ghForm" class="form-grid" autocomplete="off">
+<div><label>Propietario de GitHub *</label><input id="ghOwner" name="owner" required maxlength="90" placeholder="usuario-o-organización" autocomplete="off"></div>
+<div><label>Repositorio *</label><input id="ghRepo" name="repo" required maxlength="100" placeholder="mi-repositorio" autocomplete="off"></div>
+<div><label>Rama *</label><input id="ghBranch" name="branch" required maxlength="200" value="main" autocomplete="off"></div>
+<div><label>Archivo JSON en el repositorio *</label><input id="ghPath" name="path" required maxlength="400" value="cronogramas_datos.json" autocomplete="off"></div>
+<div><label>Token GitHub (no se guarda) *</label><input id="ghToken" type="password" name="token" required autocomplete="new-password" placeholder="github_pat_..."></div>
+<div><label>Clave de cifrado privada (mínimo 12 caracteres) *</label><input id="ghSecret" type="password" name="secret" required minlength="12" autocomplete="new-password" placeholder="Clave distinta de la de GitHub"></div>
+<div class="wide actions"><button class="btn primary" type="submit">Conectar y activar guardado automático</button><button class="btn light" type="button" id="ghDisconnect">Desconectar</button></div>
+</form>
+<div id="ghStatus" class="note" role="status" style="margin-top:12px" aria-live="polite">GitHub desconectado. Los cambios siguen guardándose localmente.</div>
+<div class="actions" style="margin-top:12px"><button class="btn light" id="ghPublish" disabled title="Confirmar publicación de los datos de este navegador">↑ Publicar datos locales</button><button class="btn light" id="ghPull" disabled title="Restaurar desde el JSON cifrado del repositorio">↓ Traer datos de GitHub</button></div>
+<p class="fine" style="margin-top:10px">Si los datos locales y los de GitHub son distintos, el aplicativo detiene la escritura y pide elegir una versión. Ante conflictos o fallas de Internet, conserva los cambios locales sin sobrescribir datos remotos.</p>
+</div>
 <div class="card" style="margin-top:14px"><h3>Importante sobre el modo local</h3><p class="note">La separación entre administrador y lectores se aplica en la interfaz y en las funciones del aplicativo. <strong>Un archivo HTML local no proporciona controles de seguridad resistentes ante alguien que tenga acceso directo al almacenamiento o al código del equipo.</strong> Mantenga el perfil del administrador protegido, no comparta los respaldos privados y utilice «↗ Consulta» para enviar una copia sin funciones de edición.</p><p class="fine">Al cambiar de navegador, limpiar los datos del sitio o mover este archivo a otra ruta, los registros locales pueden no estar disponibles. Conserve copias JSON.</p></div></section>
 </main></div>
 <div id="modal" class="modal" role="dialog" aria-modal="true"><div class="modal-box"><div class="modal-head"><h3 id="modalTitle">Formulario</h3><button class="icon-close" id="modalClose" aria-label="Cerrar">×</button></div><div id="modalContent"></div></div></div>
 <div id="toast" class="toast" role="status"></div><div id="printReport" class="report-print"></div>
 <script>
 'use strict';
-/* Aplicativo local autónomo. No realiza peticiones a Internet. */
+/* Aplicativo con almacenamiento local y sincronización GitHub opcional mediante API. */
 const KEY='gmc_cronogramas_local_v1';
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -69,7 +85,7 @@ function toast(message,bad=false){const t=$('toast');t.textContent=message;t.sty
 function error(e){console.error(e);toast(e?.message||'No se pudo completar la operación.',true)}
 async function action(fn){if(busy)return;busy=true;try{await fn()}catch(e){error(e)}finally{busy=false}}
 function readDB(){const raw=localStorage.getItem(KEY);if(!raw)return {version:1,users:[],projects:[],tasks:[],history:[],modified:new Date().toISOString()};const x=JSON.parse(raw);if(!x||!Array.isArray(x.users)||!Array.isArray(x.projects)||!Array.isArray(x.tasks)||!Array.isArray(x.history))throw Error('Datos locales inválidos. No se ha sobrescrito nada.');return x}
-function commit(fn){needAdmin();const copy=JSON.parse(JSON.stringify(db));fn(copy);copy.modified=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(copy));db=copy;renderAll()}
+function commit(fn){needAdmin();const copy=JSON.parse(JSON.stringify(db));fn(copy);copy.modified=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(copy));db=copy;renderAll();ghLocalSaved()}
 function addLog(state,proyectoId,tipo,detalle,nombreActividad='',nombreProyecto=''){state.history.push({id:uid(),proyectoId,tipo,detalle,nombreActividad,nombreProyecto,autor:user()?.name||'Administrador',fecha:new Date().toISOString()});}
 function sameLogin(name){return String(name||'').trim().toLocaleLowerCase('es')}
 function bytesHex(bytes){return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('')}
@@ -78,8 +94,8 @@ function constantTimeEqual(a,b){if(a.length!==b.length)return false;let diff=0;f
 async function verify(password,rec){if(!rec?.hash||!rec.salt)return false;return constantTimeEqual((await credential(password,rec.salt)).hash,rec.hash)}
 function showGate(){const initialized=db.users.some(u=>u.role==='admin');$('loading').classList.add('hidden');$('app').classList.add('hidden');$('login').classList.remove('hidden');$('setupPanel').classList.toggle('hidden',initialized);$('loginPanel').classList.toggle('hidden',!initialized);$('loginError').classList.add('hidden');$('loginForm').reset();}
 function showApp(){if(!user()){session=null;showGate();return}$('loading').classList.add('hidden');$('login').classList.add('hidden');$('app').classList.remove('hidden');document.querySelectorAll('.admin-only').forEach(el=>el.classList.toggle('hidden',!admin()));$('userLabel').textContent=(admin()?'🔐 Administrador · ':'👁️ Solo consulta · ')+user().name;
- $('connectionNotice').classList.remove('hidden');$('connectionNotice').innerHTML='💾 <strong>Modo local sin conexión:</strong> los cambios se guardan solo en este navegador y equipo. Use <strong>Respaldo</strong> periódicamente. No hay sincronización automática con otros dispositivos.';
- $('projectPicker').value=activeProject;openPage(currentPage);}
+ $('connectionNotice').classList.remove('hidden');$('connectionNotice').innerHTML='💾 <strong>Guardado local:</strong> cada cambio se conserva en este navegador. Puede activar la copia automática cifrada a GitHub desde <strong>Respaldo</strong>. La página no carga datos de GitHub automáticamente en otros dispositivos.';
+ $('projectPicker').value=activeProject;openPage(currentPage);ghRenderStatus();}
 function chooseProject(){if(!db.projects.some(p=>p.id===activeProject&&!p.archived))activeProject=db.projects.find(p=>!p.archived)?.id||''}
 const projects=()=>db.projects.filter(p=>!p.archived);
 const project=()=>db.projects.find(p=>p.id===activeProject&&!p.archived);
@@ -159,14 +175,178 @@ function reportHTML(p,a){return `<h1>CRONOGRAMA DE ACTIVIDADES</h1><p><b>Proyect
 function printProject(){const p=project();if(!p)return;$('printReport').innerHTML=reportHTML(p,sortedTasks());window.print()}
 function exportConsult(){const p=project();if(!p)return;const title=esc('Cronograma de consulta · '+p.nombre),all=reportHTML(p,sortedTasks());const html=`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><style>body{font:14px Arial,sans-serif;color:#19304c;background:#f6f8fb;margin:0;padding:25px}main{max-width:1300px;margin:auto;background:white;padding:25px;border:1px solid #dce4ec;border-radius:12px}h1{font-size:23px;color:#0b3d73}p{line-height:1.6}table{width:100%;border-collapse:collapse}th,td{padding:10px;border:1px solid #d8e0ea;vertical-align:top;text-align:left;font-size:12px}th{background:#eaf3ff}table{display:block;overflow:auto}button{padding:10px 14px;background:#0b3d73;color:white;border:0;border-radius:7px;cursor:pointer}@media print{body{padding:0;background:white}main{border:none;padding:0}button{display:none}table{display:table}th,td{font-size:10px}}</style></head><body><main><button onclick="window.print()">Imprimir consulta</button>${all}<p><b>Archivo de consulta independiente:</b> no contiene formularios ni funciones para modificar el cronograma original. Es una copia fija tomada el ${niceDate(today())}.</p></main></body></html>`;download('consulta_'+today()+'.html',html,'text/html;charset=utf-8');toast('Copia de consulta generada (no se actualiza sola).')}
 function exportBackup(){needAdmin();download('respaldo_cronogramas_'+today()+'.json',JSON.stringify({schema:'gmc-cronogramas-local-1',exported:new Date().toISOString(),data:db},null,2),'application/json;charset=utf-8');toast('Respaldo JSON generado. Consérvelo en un lugar privado.')}
-async function importBackup(file){needAdmin();if(!file)return;const raw=await file.text();if(raw.length>12e6)throw Error('El archivo es demasiado grande para este aplicativo.');const pack=JSON.parse(raw);if(pack.schema!=='gmc-cronogramas-local-1')throw Error('El archivo no es un respaldo compatible.');const data=pack.data;if(!data||!Array.isArray(data.users)||!Array.isArray(data.projects)||!Array.isArray(data.tasks)||!Array.isArray(data.history)||!data.users.some(u=>u.role==='admin'&&u.hash&&u.salt))throw Error('El respaldo está incompleto o no tiene administrador.');const pw=prompt('Para restaurar, escriba su CONTRASEÑA ACTUAL de administrador:');if(pw===null)return;if(!(await verify(pw,user())))throw Error('Contraseña incorrecta. Restauración cancelada.');if(!confirm('ATENCIÓN: se reemplazarán TODOS los cronogramas y usuarios de ESTE navegador con el contenido del respaldo. Haga primero un respaldo actual. ¿Continuar?'))return;localStorage.setItem(KEY,JSON.stringify(data));db=data;session=null;showGate();toast('Respaldo restaurado. Ingrese con una cuenta del archivo restaurado.')}
-function renderBackupInfo(){$('backupCount').textContent=`${db.projects.length} proyectos · ${db.tasks.length} actividades · ${db.history.length} movimientos · Último cambio: ${datetime(db.modified)}.`}
+async function importBackup(file){needAdmin();if(!file)return;const raw=await file.text();if(raw.length>12e6)throw Error('El archivo es demasiado grande para este aplicativo.');const pack=JSON.parse(raw);if(pack.schema!=='gmc-cronogramas-local-1')throw Error('El archivo no es un respaldo compatible.');const data=pack.data;if(!data||!Array.isArray(data.users)||!Array.isArray(data.projects)||!Array.isArray(data.tasks)||!Array.isArray(data.history)||!data.users.some(u=>u.role==='admin'&&u.hash&&u.salt))throw Error('El respaldo está incompleto o no tiene administrador.');const pw=prompt('Para restaurar, escriba su CONTRASEÑA ACTUAL de administrador:');if(pw===null)return;if(!(await verify(pw,user())))throw Error('Contraseña incorrecta. Restauración cancelada.');if(!confirm('ATENCIÓN: se reemplazarán TODOS los cronogramas y usuarios de ESTE navegador con el contenido del respaldo. Haga primero un respaldo actual. ¿Continuar?'))return;ghStop();localStorage.setItem(KEY,JSON.stringify(data));db=data;session=null;showGate();toast('Respaldo restaurado. Ingrese con una cuenta del archivo restaurado.')}
+// Sincronización GitHub: credenciales SOLO en memoria, datos remotos cifrados.
+const GH_CFG_KEY='cronogramas_gh_config_v1';
+let ghConfig=null, ghToken='', ghSecret='', ghSha=null, ghAck=null, ghActive=false, ghSending=false, ghEpoch=0;
+let ghNotice='GitHub desconectado. Los datos se siguen guardando en este navegador.';
+function ghSetNotice(s){ghNotice=s;ghRenderStatus()}
+function ghRenderStatus(){
+ const el=$('ghStatus');if(!el)return;
+ el.textContent=ghNotice;
+ $('ghPublish').disabled=!admin()||!ghToken||ghSending;
+ $('ghPull').disabled=!admin()||!ghToken||ghSending;
+}
+function ghGuessedConfig(){
+ let cfg={owner:'',repo:'',branch:'main',path:'cronogramas_datos.json'};
+ try{const saved=JSON.parse(localStorage.getItem(GH_CFG_KEY)||'null');if(saved&&typeof saved==='object')cfg={...cfg,...saved}}catch(_){}
+ if(!cfg.owner&&location.hostname.endsWith('.github.io')){
+   cfg.owner=location.hostname.split('.')[0];
+   cfg.repo=location.pathname.split('/').filter(Boolean)[0]||cfg.owner+'.github.io';
+ }
+ return cfg;
+}
+function ghPreparePanel(){
+ ghConfig=ghGuessedConfig();
+ for(const [name,id] of Object.entries({owner:'ghOwner',repo:'ghRepo',branch:'ghBranch',path:'ghPath'}))$(id).value=ghConfig[name]||'';
+ ghRenderStatus();
+}
+function ghStop(){
+ ghEpoch++;ghActive=false;ghToken='';ghSecret='';ghSha=null;ghAck=null;
+ $('ghToken').value='';$('ghSecret').value='';
+ ghSetNotice('GitHub desconectado. Los cambios permanecen guardados localmente.');
+}
+function ghLocalSaved(){
+ if(!ghActive){if(ghToken)ghSetNotice('Cambios guardados localmente. GitHub detenido por diferencia de datos o error; resuelva la sincronización desde Respaldo.');return;}
+ ghSetNotice('Cambio guardado localmente. Enviando datos cifrados a GitHub…');
+ void ghFlush();
+}
+function ghValidateSettings(raw){
+ const p={owner:String(raw.owner||'').trim(),repo:String(raw.repo||'').trim(),branch:String(raw.branch||'').trim(),path:String(raw.path||'').trim()};
+ if(!/^[A-Za-z0-9-]{1,90}$/.test(p.owner)||!/^[A-Za-z0-9._-]{1,100}$/.test(p.repo))throw Error('Revisa el propietario y nombre del repositorio.');
+ if(!p.branch||p.branch.length>200||/[\x00-\x20]/.test(p.branch))throw Error('Indique una rama de GitHub válida.');
+ if(!p.path||p.path.startsWith('/')||p.path.includes('..')||p.path.includes('\\')||!p.path.endsWith('.json')||p.path.split('/').some(s=>!s||s==='.'||s==='..'))throw Error('Indique un archivo JSON válido dentro del repositorio.');
+ if(p.path.toLowerCase()==='index.html')throw Error('El archivo de datos debe ser JSON, no index.html.');
+ return p;
+}
+function ghUrl(){
+ const p=ghConfig;
+ return 'https://api.github.com/repos/'+encodeURIComponent(p.owner)+'/'+encodeURIComponent(p.repo)+'/contents/'+p.path.split('/').map(encodeURIComponent).join('/')+'?ref='+encodeURIComponent(p.branch);
+}
+function ghWriteUrl(){return ghUrl().split('?ref=')[0]}
+function ghHeaders(){return {Accept:'application/vnd.github+json',Authorization:'Bearer '+ghToken}}
+function ghB64(bytes){let out='';for(let i=0;i<bytes.length;i+=8192)out+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(out)}
+function ghUnb64(value){const s=atob(String(value||'').replace(/\s/g,''));return Uint8Array.from(s,c=>c.charCodeAt(0))}
+function ghValidateDB(d){
+ return d&&Array.isArray(d.users)&&Array.isArray(d.projects)&&Array.isArray(d.tasks)&&Array.isArray(d.history)&&d.users.some(u=>u.role==='admin'&&u.hash&&u.salt);
+}
+async function ghEncrypt(plain){
+ if(!crypto?.subtle)throw Error('Se requiere HTTPS y un navegador con criptografía segura para cifrar la copia.');
+ const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+ const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(ghSecret),'PBKDF2',false,['deriveKey']);
+ const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:210000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt']);
+ const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(plain));
+ return JSON.stringify({schema:'cronogramas-github-cifrado-1',salt:ghB64(salt),iv:ghB64(iv),data:ghB64(new Uint8Array(cipher))},null,2)+'\n';
+}
+async function ghDecrypt(raw){
+ const obj=JSON.parse(raw);
+ if(obj.schema!=='cronogramas-github-cifrado-1')throw Error('El JSON remoto no tiene el formato cifrado de esta aplicación. Para reemplazarlo, utilice «Publicar datos locales» tras verificar su contenido.');
+ if(!crypto?.subtle)throw Error('No se puede descifrar en este navegador.');
+ const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(ghSecret),'PBKDF2',false,['deriveKey']);
+ const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:ghUnb64(obj.salt),iterations:210000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+ let plaintext;
+ try{plaintext=await crypto.subtle.decrypt({name:'AES-GCM',iv:ghUnb64(obj.iv)},key,ghUnb64(obj.data))}
+ catch(_){throw Error('La clave de cifrado es incorrecta o el JSON remoto fue modificado. No se ha sobrescrito nada.');}
+ const data=JSON.parse(new TextDecoder().decode(plaintext));
+ if(!ghValidateDB(data))throw Error('El archivo descifrado no contiene una base de datos válida.');
+ return data;
+}
+async function ghRemote(){
+ const r=await fetch(ghUrl(),{method:'GET',headers:ghHeaders(),cache:'no-store'});
+ if(r.status===404)return null;
+ if(!r.ok)throw Error('GitHub no permitió consultar el JSON (HTTP '+r.status+'). Revisa token, repositorio, rama y conexión.');
+ const file=await r.json();
+ if(!file||file.type!=='file'||!file.sha||!file.content)throw Error('GitHub no devolvió el contenido completo del archivo JSON.');
+ return {sha:file.sha,raw:new TextDecoder().decode(ghUnb64(file.content))};
+}
+async function ghPut(plain,expectedSha){
+ const encrypted=await ghEncrypt(plain);
+ const body={message:'Cronogramas: guardar cambios desde aplicativo web',content:ghB64(new TextEncoder().encode(encrypted)),branch:ghConfig.branch};
+ if(expectedSha)body.sha=expectedSha;
+ const r=await fetch(ghWriteUrl(),{method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},body:JSON.stringify(body)});
+ if(!r.ok){
+   if(r.status===409||r.status===422)throw Error('Conflicto al guardar en GitHub (HTTP '+r.status+'). Se conservan los cambios locales; reconecta y compara antes de sobrescribir.');
+   throw Error('GitHub no guardó los cambios (HTTP '+r.status+'). Se conservaron localmente. Comprueba el permiso Contents: Read and write.');
+ }
+ const result=await r.json();
+ if(!result?.content?.sha)throw Error('GitHub no confirmó la versión del archivo. Verifica el repositorio antes de continuar.');
+ return result.content.sha;
+}
+async function ghFlush(){
+ if(ghSending||!ghActive||!ghToken||!admin())return;
+ ghSending=true;const epoch=ghEpoch;ghRenderStatus();
+ try{
+   while(ghActive&&epoch===ghEpoch&&admin()){
+     const plain=JSON.stringify(db);
+     if(plain===ghAck){ghSetNotice('✓ GitHub actualizado. Todos los cambios de este navegador están guardados en el JSON cifrado.');break;}
+     const head=await ghRemote();
+     if(epoch!==ghEpoch)break;
+     if((head?.sha||null)!==ghSha)throw Error('GitHub tiene una versión más reciente del JSON. Sincronización detenida para evitar sobrescribir cambios ajenos.');
+     const sha=await ghPut(plain,ghSha);
+     if(epoch!==ghEpoch)break;
+     ghSha=sha;ghAck=plain;
+     if(JSON.stringify(db)!==ghAck)ghSetNotice('Se guardó una versión en GitHub. Quedan cambios locales por enviar…');
+   }
+ }catch(e){if(epoch===ghEpoch){ghActive=false;ghSetNotice('⚠ No sincronizado: '+e.message+' Los cambios locales no se perdieron.');}}
+ finally{ghSending=false;ghRenderStatus();}
+}
+async function ghConnect(){
+ needAdmin();if(ghSending)throw Error('Hay una escritura en curso.');
+ const p=ghValidateSettings({owner:$('ghOwner').value,repo:$('ghRepo').value,branch:$('ghBranch').value,path:$('ghPath').value});
+ const token=$('ghToken').value.trim(),secret=$('ghSecret').value;
+ if(!token||secret.length<12)throw Error('Ingrese el token y una clave de cifrado de 12 caracteres o más.');
+ ghEpoch++;ghActive=false;ghConfig=p;ghToken=token;ghSecret=secret;ghSha=null;ghAck=null;
+ localStorage.setItem(GH_CFG_KEY,JSON.stringify(p));
+ ghSetNotice('Consultando GitHub y comparando datos locales…');
+ try{
+   const remote=await ghRemote();
+   ghSha=remote?.sha||null;
+   if(remote){
+     try{
+       const fromGitHub=await ghDecrypt(remote.raw);
+       if(JSON.stringify(fromGitHub)===JSON.stringify(db)){
+         ghAck=JSON.stringify(db);ghActive=true;
+         ghSetNotice('✓ Conectado. Datos locales y de GitHub coinciden. Los siguientes cambios se guardarán automáticamente.');
+       }else{
+         ghSetNotice('⚠ Hay diferencias entre GitHub y este navegador. Por seguridad NO se sobrescribió nada. Use «Publicar datos locales» o «Traer datos de GitHub» después de verificar cuál versión desea conservar.');
+       }
+     }catch(e){
+       ghSetNotice('⚠ El archivo JSON existe pero no se pudo comparar: '+e.message+' Puede publicar la versión local expresamente después de revisar el contenido remoto.');
+     }
+   }else{
+     ghActive=true;ghSetNotice('Archivo remoto no encontrado. Creando la primera copia cifrada en GitHub…');
+     await ghFlush();
+   }
+   $('ghToken').value='';$('ghSecret').value='';
+ }catch(e){ghActive=false;ghSetNotice('⚠ No se conectó: '+e.message+' Los datos locales siguen intactos.');throw e;}
+}
+async function ghPublishLocal(){
+ needAdmin();if(!ghToken||ghSending)throw Error('Conecte GitHub antes de publicar.');
+ const current=await ghRemote();
+ if((current?.sha||null)!==ghSha)throw Error('El archivo remoto cambió desde la comprobación inicial. Vuelva a conectar antes de publicar.');
+ const warning='ATENCIÓN: se reemplazará el contenido de '+ghConfig.owner+'/'+ghConfig.repo+'/'+ghConfig.path+' con TODOS los datos actuales de este navegador, cifrados. La versión remota anterior se conservará solo en el historial de GitHub. ¿Continuar?';
+ if(!confirm(warning))return;
+ ghAck=null;ghActive=true;ghSetNotice('Enviando la versión local confirmada a GitHub…');await ghFlush();
+}
+async function ghPullData(){
+ needAdmin();if(!ghToken||ghSending)throw Error('Conecte GitHub antes de recuperar datos.');
+ const remote=await ghRemote();if(!remote)throw Error('Todavía no existe el JSON en el repositorio.');
+ const data=await ghDecrypt(remote.raw);
+ const pass=prompt('Para traer los datos remotos, escriba la contraseña ACTUAL del administrador local:');
+ if(pass===null)return;
+ if(!(await verify(pass,user())))throw Error('Contraseña incorrecta. No se modificaron los datos.');
+ if(!confirm('ATENCIÓN: se reemplazarán todos los cronogramas y usuarios de ESTE navegador por la copia cifrada de GitHub. Descargue un respaldo local antes de continuar. ¿Restaurar?'))return;
+ ghStop();localStorage.setItem(KEY,JSON.stringify(data));db=data;session=null;activeProject='';currentPage='resumen';showGate();
+ toast('Datos de GitHub cargados. Ingrese con un usuario de la copia recuperada.');
+}
+
+function renderBackupInfo(){ghRenderStatus();$('backupCount').textContent=`${db.projects.length} proyectos · ${db.tasks.length} actividades · ${db.history.length} movimientos · Último cambio: ${datetime(db.modified)}.`}
 $('modalClose').onclick=closeModal;$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 $('setupForm').onsubmit=e=>{e.preventDefault();action(async()=>{if(db.users.some(u=>u.role==='admin'))throw Error('El administrador ya está configurado.');const f=new FormData(e.target),name=String(f.get('name')||'').trim(),login=String(f.get('login')||'').trim(),pass=String(f.get('pass')||'');if(!name||login.length<3||pass.length<8||pass!==f.get('pass2'))throw Error('Ingrese nombre, usuario y contraseña coincidente de mínimo 8 caracteres.');const c=await credential(pass),u={id:uid(),name,login,role:'admin',active:true,created:new Date().toISOString(),...c};db.users.push(u);try{localStorage.setItem(KEY,JSON.stringify(db))}catch(x){db.users.pop();throw Error('No se pudo guardar en el navegador. Habilite el almacenamiento local. '+x.message)}session={id:u.id};showApp();toast('Administrador creado. Ya puede registrar cronogramas.')})};
 $('loginForm').onsubmit=e=>{e.preventDefault();action(async()=>{const login=sameLogin($('loginEmail').value),pass=$('loginPassword').value,u=db.users.find(u=>sameLogin(u.login)===login&&u.active);const good=u&&await verify(pass,u);if(!good){$('loginError').textContent='Usuario, contraseña o estado de cuenta incorrectos.';$('loginError').classList.remove('hidden');return}session={id:u.id};$('loginError').classList.add('hidden');showApp()})};
-$('btnLogout').onclick=()=>{session=null;activeProject='';currentPage='resumen';showGate()};$('projectPicker').onchange=e=>{activeProject=e.target.value;renderAll()};document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openPage(b.dataset.page));$('btnAddProject').onclick=()=>modalProject();$('btnAddTask').onclick=()=>modalTask();$('btnExample').onclick=loadExample;$('btnAddUser').onclick=modalUser;$('btnPrint').onclick=printProject;$('btnExport').onclick=exportCSV;$('btnConsult').onclick=exportConsult;$('viewTasks').onclick=()=>openPage('actividades');$('btnBackup').onclick=()=>action(async()=>exportBackup());$('btnRestore').onclick=()=>$('backupFile').click();$('backupFile').onchange=e=>action(async()=>{await importBackup(e.target.files[0]);e.target.value=''});$('btnChangeAdmin').onclick=changeAdminPassword;
+$('btnLogout').onclick=()=>{ghStop();session=null;activeProject='';currentPage='resumen';showGate()};$('projectPicker').onchange=e=>{activeProject=e.target.value;renderAll()};document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openPage(b.dataset.page));$('btnAddProject').onclick=()=>modalProject();$('btnAddTask').onclick=()=>modalTask();$('btnExample').onclick=loadExample;$('btnAddUser').onclick=modalUser;$('btnPrint').onclick=printProject;$('btnExport').onclick=exportCSV;$('btnConsult').onclick=exportConsult;$('viewTasks').onclick=()=>openPage('actividades');$('btnBackup').onclick=()=>action(async()=>exportBackup());$('btnRestore').onclick=()=>$('backupFile').click();$('backupFile').onchange=e=>action(async()=>{await importBackup(e.target.files[0]);e.target.value=''});$('btnChangeAdmin').onclick=changeAdminPassword;$('ghForm').onsubmit=e=>{e.preventDefault();action(ghConnect)};$('ghDisconnect').onclick=ghStop;$('ghPublish').onclick=()=>action(ghPublishLocal);$('ghPull').onclick=()=>action(ghPullData);
 ['taskSearch','filterPhase','filterStatus','filterOrder'].forEach(id=>$(id).addEventListener(id==='taskSearch'?'input':'change',renderTasks));$('clearFilters').onclick=()=>{$('taskSearch').value='';$('filterPhase').value='';$('filterStatus').value='';$('filterOrder').value='fecha';renderTasks()};
-try{db=readDB();renderBackupInfo();showGate()}catch(e){console.error(e);$('loading').classList.remove('hidden');$('loading').innerHTML='<div class="login-card"><h2>Error al leer datos locales</h2><p>'+esc(e.message)+'</p><p>Para proteger sus registros, la aplicación no los sobrescribirá. Revise el almacenamiento o restaure un respaldo manualmente.</p></div>'}
+try{db=readDB();ghPreparePanel();renderBackupInfo();showGate()}catch(e){console.error(e);$('loading').classList.remove('hidden');$('loading').innerHTML='<div class="login-card"><h2>Error al leer datos locales</h2><p>'+esc(e.message)+'</p><p>Para proteger sus registros, la aplicación no los sobrescribirá. Revise el almacenamiento o restaure un respaldo manualmente.</p></div>'}
 
 </script>
 </body></html>
