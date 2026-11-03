@@ -1,0 +1,277 @@
+{
+  "schema": "gmc-cronogramas-local-1",
+  "exported": "2026-11-03T01:33:26.382Z",
+  "data": {
+    "version": 1,
+    "users": [
+      {
+        "id": "a1c79d24-4fea-4a9b-93c7-ee473807b5a8",
+        "name": "Pamela Ramos",
+        "login": "fernandapamela.upec",
+        "role": "admin",
+        "active": true,
+        "created": "2026-11-02T23:57:36.980Z",
+        "salt": "764ca0d0063ecd6c736a2818d19b3b2a",
+        "hash": "efbf29944a32ad85de7d64db5da2e53849bdd7d9f221c859754dd93fc0f40ff1"
+      }
+    ],
+    "projects": [
+      {
+        "id": "582266d4-2e0c-4429-81d0-10a64f805334",
+        "nombre": "Proyecto Final- Fundamentos de la animación",
+        "descripcion": "Crear un corto animado en la técnica de Claymotion como resultado de aprendizaje",
+        "responsable": "Pamela Ramos",
+        "codigo": "f01",
+        "archived": true,
+        "created": "2026-11-03T00:02:23.208Z"
+      },
+      {
+        "id": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "nombre": "Proyecto Final- Fundamentos de la animación",
+        "descripcion": "Crear un corto animado con la técnica de claymotion que responda a los resultados de aprendizaje",
+        "responsable": "Pamela Ramos",
+        "codigo": "f03",
+        "archived": false,
+        "created": "2026-11-03T00:05:36.230Z"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "a72b126c-564b-48e0-9f87-f8cb38d48a16",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "archived": false,
+        "avance": 100,
+        "history": [],
+        "numero": 1,
+        "fase": "Convocatoria",
+        "actividad": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "fechaEntrega": "2026-10-28",
+        "responsable": "",
+        "entregable": "Entrega de la narrativa visual, escenarios y personajes",
+        "observaciones": "Entrega en boceto, una vez aprobado comience el desarrollo de la animación",
+        "created": "2026-11-03T00:08:12.079Z",
+        "ultimoSeguimiento": "2026-11-02",
+        "ultimaObservacion": "Revisión de la narrativa, escenarios, personajes",
+        "updated": "2026-11-03T01:32:52.412Z"
+      },
+      {
+        "id": "7b193169-552d-4547-805a-a4db1071130f",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "archived": false,
+        "avance": 0,
+        "history": [],
+        "numero": 2,
+        "fase": "Desarrollo",
+        "actividad": "Desarrollar los personaje y escenarios en plastilina/cartón y otros materiales que sean coherentes con la animación y su narrativa.",
+        "fechaEntrega": "2026-11-06",
+        "responsable": "",
+        "entregable": "Fotografias de evidencia del avance 1: foto de los personajes, escenario(s). Montaje de de la primera escena.",
+        "observaciones": "Se sube la evidencia de lo solicitado, sin embargo, cada uno debe avanzar al menos al 20% de su cortometraje",
+        "created": "2026-11-03T00:10:31.310Z"
+      },
+      {
+        "id": "d5755d55-2c9a-4b98-bb7a-3932876a6af7",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "archived": false,
+        "avance": 0,
+        "history": [],
+        "numero": 3,
+        "fase": "Desarrollo",
+        "actividad": "Desarrollo del cortometraje:\nPresentar 780 fotos (equivalente a 30 segundos)",
+        "fechaEntrega": "2026-11-13",
+        "responsable": "",
+        "entregable": "Foto evidencia",
+        "observaciones": "Corresponde al 50% del avance de la animación",
+        "created": "2026-11-03T00:17:29.372Z"
+      },
+      {
+        "id": "0300fd35-0aeb-43f2-a189-6d8f1f236154",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "archived": false,
+        "avance": 0,
+        "history": [],
+        "numero": 4,
+        "fase": "Desarrollo",
+        "actividad": "Desarrollo de la animación\nDebe constar el proyecto en un 90% de avance ( las fotos van acorde a las necesidades de la animación)",
+        "fechaEntrega": "2026-11-19",
+        "responsable": "",
+        "entregable": "Tïtulo y créditos",
+        "observaciones": "Avances casi terminado que falte colocar introduccuón y final",
+        "created": "2026-11-03T00:21:02.823Z"
+      },
+      {
+        "id": "ec4e9361-f329-47f0-bf9c-412c2eeafc34",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "archived": false,
+        "avance": 0,
+        "history": [],
+        "numero": 5,
+        "fase": "Desarrollo",
+        "actividad": "Entrega del corto animado",
+        "fechaEntrega": "2026-11-20",
+        "responsable": "",
+        "entregable": "Video",
+        "observaciones": "Entrega de editables",
+        "created": "2026-11-03T00:22:49.884Z"
+      },
+      {
+        "id": "c4d329f9-1cd8-46ba-b862-b2071ea60228",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "archived": false,
+        "avance": 0,
+        "history": [],
+        "numero": 6,
+        "fase": "Desarrollo",
+        "actividad": "Curaduría de material audiovisual",
+        "fechaEntrega": "2026-11-20",
+        "responsable": "Gonzalo Ibarra",
+        "entregable": "Ninguno",
+        "observaciones": "Evaluación de técnica, contenido previo a la entrega final",
+        "created": "2026-11-03T00:24:56.209Z"
+      }
+    ],
+    "history": [
+      {
+        "id": "afa5d1e5-fe71-459e-b20a-0d4fd1d0dc7b",
+        "proyectoId": "582266d4-2e0c-4429-81d0-10a64f805334",
+        "tipo": "Proyecto creado",
+        "detalle": "Proyecto Final- Fundamentos de la animación",
+        "nombreActividad": "",
+        "nombreProyecto": "Proyecto Final- Fundamentos de la animación",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:02:23.208Z"
+      },
+      {
+        "id": "5429a5ca-9076-4dbd-9560-61ee3fde6a76",
+        "proyectoId": "582266d4-2e0c-4429-81d0-10a64f805334",
+        "tipo": "Proyecto archivado",
+        "detalle": "Proyecto Final- Fundamentos de la animación",
+        "nombreActividad": "",
+        "nombreProyecto": "Proyecto Final- Fundamentos de la animación",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:02:40.715Z"
+      },
+      {
+        "id": "3aa36bad-6ac9-40cd-972b-10b7e9dd83a8",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Proyecto creado",
+        "detalle": "Proyecto Final- Fundamentos de la animación",
+        "nombreActividad": "",
+        "nombreProyecto": "Proyecto Final- Fundamentos de la animación",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:05:36.230Z"
+      },
+      {
+        "id": "e839c0f9-65ee-4504-bd21-2fc915c88419",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad creada",
+        "detalle": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreActividad": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:08:12.079Z"
+      },
+      {
+        "id": "23dc9639-9a1d-438b-abab-c3ac777bda07",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad creada",
+        "detalle": "Desarrollar los personaje y escenarios en plastilina/cartón y otros materiales que sean coherentes con la animación y su narrativa.",
+        "nombreActividad": "Desarrollar los personaje y escenarios en plastilina/cartón y otros materiales que sean coherentes con la animación y su narrativa.",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:10:31.310Z"
+      },
+      {
+        "id": "1b84b67a-30e3-497c-ba63-7e2a62684347",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad editada",
+        "detalle": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreActividad": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:11:06.956Z"
+      },
+      {
+        "id": "e6c1bea3-6b56-4e2b-b09f-3a44086577cc",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Avance registrado",
+        "detalle": "0% → 1% · Seguimiento 02 nov 2026 · Entrega de narrativa visual, personajes y escenarios",
+        "nombreActividad": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:12:07.426Z"
+      },
+      {
+        "id": "715131d1-f2af-4074-9187-06b4810dfeea",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad creada",
+        "detalle": "Desarrollo del cortometraje:\nPresentar 780 fotos (equivalente a 30 segundos)",
+        "nombreActividad": "Desarrollo del cortometraje:\nPresentar 780 fotos (equivalente a 30 segundos)",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:17:29.372Z"
+      },
+      {
+        "id": "07923344-2bdb-47f4-9193-20790d31fad7",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad creada",
+        "detalle": "Desarrollo de la animación\nDebe constar el proyecto en un 90% de avance ( las fotos van acorde a las necesidades de la animación)",
+        "nombreActividad": "Desarrollo de la animación\nDebe constar el proyecto en un 90% de avance ( las fotos van acorde a las necesidades de la animación)",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:21:02.823Z"
+      },
+      {
+        "id": "42aecb04-a628-48e4-a2ee-09452283a2d6",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad creada",
+        "detalle": "Entrega del corto animado",
+        "nombreActividad": "Entrega del corto animado",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:22:49.884Z"
+      },
+      {
+        "id": "2898adad-db2a-4d89-9dc1-3a16d19f0f12",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad creada",
+        "detalle": "Curaduría de material audiovisual",
+        "nombreActividad": "Curaduría de material audiovisual",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T00:24:56.209Z"
+      },
+      {
+        "id": "aa72c48f-c7fd-427b-98b2-37e0851041ea",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad editada",
+        "detalle": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreActividad": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T01:06:15.628Z"
+      },
+      {
+        "id": "1b0d672e-4b76-492e-8309-358b1d4bfe01",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Actividad editada",
+        "detalle": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreActividad": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T01:07:32.894Z"
+      },
+      {
+        "id": "baf062af-1f27-494e-9fe8-d6f0a4608236",
+        "proyectoId": "0ab0ba75-e9af-443c-9f19-f8d54d1f6955",
+        "tipo": "Avance registrado",
+        "detalle": "1% → 100% · Seguimiento 02 nov 2026 · Revisión de la narrativa, escenarios, personajes",
+        "nombreActividad": "Socializar la temática, los objetivos y los lineamientos para la creación y presentación de los cortometrajes animados.",
+        "nombreProyecto": "",
+        "autor": "Pamela Ramos",
+        "fecha": "2026-11-03T01:32:52.413Z"
+      }
+    ],
+    "modified": "2026-11-03T01:32:52.413Z"
+  }
+}
